@@ -4,23 +4,22 @@
 # don't put duplicate lines in the history. See bash(1) for more options
 export HISTCONTROL=ignoreboth:erasedups
 
+export HISTIGNORE="&:ls:[bf]g:exit:history:ps:netstat:htop:cd"
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
-
 # Extended Globbing options
 shopt -s extglob
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
+fi
+
+if [ -z "$SSH_AUTH_SOCK" ] ; then
+  eval `ssh-agent -s`
+  ssh-add -A
 fi
 
 red="\033[1;31m";
@@ -40,13 +39,16 @@ fi
 EDITOR='/usr/bin/vim'
 export EDITOR
 
-if [ -f "$HOME/.bash-git-prompt/gitprompt.sh" ]; then
-    GIT_PROMPT_ONLY_IN_REPO=1
-    source $HOME/.bash-git-prompt/gitprompt.sh
-fi
+# Golang environment
+export GOPATH="${HOME}/.go"
+export GOROOT="$(brew --prefix golang)/libexec"
+export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
 
-# Pip barks at installation of packages in version 2 if not present
-PIP_REQUIRE_VIRTUALENV=false
-export PIP_REQUIRE_VIRTUALENV
-
-umask 027
+HISTTIMEFORMAT='%F %T '
+HISTFILESIZE=-1
+HISTSIZE=-1
+HISTCONTROL=ignoredups
+shopt -s histappend
+shopt -s cmdhist
+export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$"\n"}history -a; history -a; history -c; history -r"
+export GPG_TTY=`tty`
