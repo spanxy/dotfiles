@@ -1,5 +1,6 @@
 set nocompatible
 set cursorline
+set shortmess=I
 set number
 syntax on
 set laststatus=1
