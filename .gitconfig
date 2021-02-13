@@ -1,0 +1,6 @@
+[user]
+	name = Spanxy
+	email = 56843040+spanxy@users.noreply.github.com
+	signingkey = DC9005C5E6C7473B
+[commit]
+	gpgsign = true
